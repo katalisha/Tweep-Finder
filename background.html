@@ -22,11 +22,10 @@
 			function runSearch(tabId)
 			{
 				chrome.tabs.sendRequest(tabId, {}, function(results) {
-					search = new Search();
+					search = new tweepFinder.Search();
 					search.processResults(results);
 					tweeps = search.getResults();
-					console.log(tweeps);
-					updateCounter(search.getResultCount());		
+					tweepFinder.updateCounter(search.getResultCount());	
 				});	
 			}			
 		</script>

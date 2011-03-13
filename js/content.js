@@ -13,7 +13,7 @@ if (window == top) {
 // rules out search?... links by requiring the last character not be a ?
 var findTweeps = function() {
   var found = new Object();
-  var re = /twitter\.com\/(\w{1,15})($|[^\w?])/i;
+  var re = tweepFinder.Twitter.getRegex();
   var tName;
 
 	// search all the links for twitter names.

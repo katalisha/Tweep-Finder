@@ -5,7 +5,12 @@
 			var bg;
 			
 			bg = chrome.extension.getBackgroundPage();
-			alert(bg.tweeps);
+			
+			for(i = 0; i < bg.tweeps.length; i ++)
+			{
+				var tweep = bg.tweeps[i];
+				tweep.retrieveData();
+			}
 		</script>
 	</head>
 	<body>

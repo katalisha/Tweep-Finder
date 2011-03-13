@@ -9,10 +9,10 @@
     "popup": "popup.html"
   },
   "content_scripts": [
-    { "matches": ["http://*/*"], "js": ["js/util.js", "js/content.js"] }
+    { "matches": ["http://*/*"], "js": ["js/util.js", "js/app.js", "js/content.js"] }
   ], 
   "permissions": [
-    "http://twitter.com/*",
+    "http://api.twitter.com/*",
     "tabs"
   ],
   "background_page": "background.html"
