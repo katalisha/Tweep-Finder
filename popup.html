@@ -1,25 +1,68 @@
 <html>
 	<head>
+		<script src="js/jquery-1.5.1.min.js"></script>	
 		<link rel="stylesheet" href="css/popup.css">
 		<script>
-				var bg;
-								
-				bg = chrome.extension.getBackgroundPage();
+			$(document).ready(function() {		
+
+				var bg = chrome.extension.getBackgroundPage();
+				var twitterTemplate = $('#twitterTemplate').detach();
 				
+				// set the function for handling a failure in retrieving the twitter details.	
+				bg.setFailureCallback(failure);
+				
+				// grad the twitter details for each tweep.
 				for(i = 0; i < bg.tweeps.length; i ++) {
 					var tweep = bg.tweeps[i];
+					// set up the list now so the order is preserved.
+					setUpRow(tweep);
 					tweep.retrieveData(renderTweep);
 				}
-				
+
+				// set up an empty row (the twitter details may not be retrieved yet).
+				function setUpRow(tweep) {
+					var row = twitterTemplate.clone().attr('id', tweep.getName());
+					$('#twitterList').append(row);					
+				}	
+
+				// update the row.
 				function renderTweep(tweep) {
-					console.log(tweep.getName());
-					console.log(tweep.getFullName());
-					console.log(tweep.getDescription());
-					console.log(tweep.getImageURL());
-				}				
+					var row = $('#' + tweep.getName());
+					$('.name', row).text(tweep.getName());
+					$('.fullname', row).text(tweep.getFullName());
+					$('a', row).attr('href', tweep.getURL());
+					$('img', row).attr('src', tweep.getImageURL());
+					$('.description', row).text(tweep.getDescription());
+					
+					$('#loading').hide();
+					$('#fail').hide();
+					$('#twitterList').show();					
+				}		
+				
+				// handle a failure in twitter retrieval.
+				function failure() {
+					$('#loading').hide();
+					$('#twitterList').hide();
+					$('#fail').show();
+				}
+
+			});
 		</script>
 	</head>
 	<body>
-		<p>Popup</p>
+		<h1 id="loading">Loading...</h1>
+		<ul id="twitterList" style="display: none">
+			<li id="twitterTemplate">
+				<img class="image" src="">
+				<a class="button">View</a>
+				<a class="fullname"></a>
+				<div class="name"></div>
+				<div class="description"></div>
+			</li>
+		</ul>
+		<div id="fail" style="display: none">
+			<h1>Could not contact Twitter</h1>
+			<p>You may have exceeded the query limit. Try again in a few moments.</p>
+		</div>
 	</body>
 </html>

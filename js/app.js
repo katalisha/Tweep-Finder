@@ -123,11 +123,14 @@ tweepFinder.Connector = new Interface('Connector', ['getRegex', 'lookUp']);
 // Twitter Singleton
 tweepFinder.Twitter = (function() {
 	 var _regex = /twitter\.com\/(\w{1,15})($|[^\w?])/i;
-
+	 var _failure;
 	return {
 		// return the regex for this connector.
 		getRegex: function() {
 			return _regex;
+		},
+		setFailureCallback: function(callback) {
+			_failure = callback;
 		},
 		
 		// look up a match from the regex.
@@ -139,6 +142,10 @@ tweepFinder.Twitter = (function() {
 					callback(response);	
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
+					if(typeof(_failure) == 'function')
+					{
+						_failure();	
+					}
 					console.log(textStatus);
 				}
 			});

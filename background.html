@@ -6,6 +6,11 @@
 		<script src="js/app.js"></script>
 		<script>
 			var tweeps;
+
+			// set up the failure callback on the twitter object.
+			function setFailureCallback(callback) {
+				tweepFinder.Twitter.setFailureCallback(callback);
+			}
 			
 			$(document).ready(function() {
 			 	var search;		
@@ -22,15 +27,15 @@
 				 	search = runSearch(tab.id);
 				});
 				
-				function runSearch(tabId)
-				{
+				// search the page for twitter accounts.
+				function runSearch(tabId) {
 					chrome.tabs.sendRequest(tabId, {}, function(results) {
 						search = new tweepFinder.Search();
 						search.processResults(results);
 						tweeps = search.getResults();
 						tweepFinder.updateCounter(search.getResultCount());	
 					});	
-				}		
+				}	
 			});
 		</script>
 	</head>
