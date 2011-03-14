@@ -2,15 +2,21 @@
 	<head>
 		<link rel="stylesheet" href="css/popup.css">
 		<script>
-			var bg;
-			
-			bg = chrome.extension.getBackgroundPage();
-			
-			for(i = 0; i < bg.tweeps.length; i ++)
-			{
-				var tweep = bg.tweeps[i];
-				tweep.retrieveData();
-			}
+				var bg;
+								
+				bg = chrome.extension.getBackgroundPage();
+				
+				for(i = 0; i < bg.tweeps.length; i ++) {
+					var tweep = bg.tweeps[i];
+					tweep.retrieveData(renderTweep);
+				}
+				
+				function renderTweep(tweep) {
+					console.log(tweep.getName());
+					console.log(tweep.getFullName());
+					console.log(tweep.getDescription());
+					console.log(tweep.getImageURL());
+				}				
 		</script>
 	</head>
 	<body>

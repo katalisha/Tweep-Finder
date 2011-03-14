@@ -36,6 +36,12 @@ tweepFinder.Search.method('getResults', function() {
 	return this._results;
 });
 
+
+/**
+ * Info Interface - required function for information objects used by the popup html.
+**/
+tweepFinder.Info = new Interface('Info', ['getName', 'getFullName', 'getImageURL', 'getDescription', 'getURL']);
+
 /**
  * Tweep class.
  * Represents a twitter account.
@@ -48,10 +54,8 @@ tweepFinder.Tweep = function(name, frequency) {
 	
 	this.setName(name);
 	
-	this.render = function(data) {
-		me._data = data;
-		console.log(me);
-	}	
+	//make sure the twitter object implements the connector interface.
+	Interface.ensureImplements(this, tweepFinder.Info);	
 }
 
 // set the twitter name
@@ -68,10 +72,39 @@ tweepFinder.Tweep.method('getFrequency', function() {
 	return this._frequency;
 });
 
-tweepFinder.Tweep.method('retrieveData', function() {
-	tweepFinder.Twitter.lookUp(this._name, this.render);
+// retreives the data from twitter. The data and the given callback will be passed
+// on to the update function.
+tweepFinder.Tweep.method('retrieveData', function(callback) {
+	// create closure for so callback function has access to this.
+	var me = this;
+	tweepFinder.Twitter.lookUp(this._name,
+		function(response) {
+			me.update(response, callback);
+		}
+	);
 });
 
+// updates the tweep data and executes the given callback.
+tweepFinder.Tweep.method('update', function(data, callback) {
+	this._data = data;
+	callback(this);
+});
+
+tweepFinder.Tweep.method('getFullName', function() {
+	return this._data.name || 'Unknown';
+});
+
+tweepFinder.Tweep.method('getImageURL', function() {
+	return this._data.profile_image_url || 'images/noTwitterImg.png';
+});
+
+tweepFinder.Tweep.method('getDescription', function() {
+	return this._data.description || 'Not found';	
+});
+
+tweepFinder.Tweep.method('getURL', function() {
+	return this._data.url || 'http://twitter.com';
+});
 
 /**
  * Sort Tweep objects according to frequency descending, if same frequency leave in order.
@@ -99,10 +132,16 @@ tweepFinder.Twitter = (function() {
 		
 		// look up a match from the regex.
 		lookUp: function(regexMatch, callback) {
-			tweepFinder.ajax(
-				'http://api.twitter.com/1/users/show.json?screen_name=' + regexMatch,
-				callback
-			);
+			$.ajax({
+				url: 'http://api.twitter.com/1/users/show.json?screen_name=' + regexMatch,
+				dataType: 'json',
+				success: function(response) {
+					callback(response);	
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log(textStatus);
+				}
+			});
 		}
 	}
 })();
