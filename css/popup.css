@@ -7,13 +7,18 @@ body {
 	color: #555555;
 	font-family: Arial,Sans-serif;
 	font-size: 12px;	
-	width: 460px;
+	overflow-x: hidden;
 	padding: 10px;
+	width: 460px;	
 }
 
 a {
 	color: #2276BB;	
 	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
 }
 
 h1 {
@@ -26,26 +31,35 @@ li {
 	border-bottom: 1px solid #EEEEEE;		
 	clear: both;
 	list-style-type: none;
-	padding: 10px 0px;
+	padding: 10px;
 	vertical-align: middle;
 	min-height: 48px;	
+	display: none;
 }
 
 li:first-child {
 	border-top: 1px solid #EEEEEE;
 }
 
+li.found {
+	display: block;
+}
+
+li:hover {
+	background-color: #FAFAFA;
+}
+
 #twitterList .image {
 	float: left;
 	height: 48px;
-	padding: 0px 5px;
+	padding-right: 5px;
 	width: 48px;
 }
 
 .button {
 	border: 1px solid #2276BB;	
 	display: block;
-	padding: 5px;
+	padding: 3px;
 	text-align: center;
 	-webkit-border-radius: 5px;	
 	-webkit-box-shadow: 0 1px 2px #888;	

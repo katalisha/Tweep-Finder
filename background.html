@@ -15,6 +15,11 @@
 			$(document).ready(function() {
 			 	var search;		
 
+				// run on selected tab
+				chrome.tabs.getSelected(null, function(tab) {
+				 	search = runSearch(tab.id);
+				});
+				
 			 	// add a listener to updated tabs
 				chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
 				  if (change.status == "complete") {
@@ -22,18 +27,17 @@
 				  }
 				});	
 				
-				// run on selected tab
-				chrome.tabs.getSelected(null, function(tab) {
-				 	search = runSearch(tab.id);
+				chrome.tabs.onSelectionChanged.addListener(function(tabId, info) {
+					search = runSearch(tabId);
 				});
-				
+							
 				// search the page for twitter accounts.
 				function runSearch(tabId) {
 					chrome.tabs.sendRequest(tabId, {}, function(results) {
 						search = new tweepFinder.Search();
 						search.processResults(results);
 						tweeps = search.getResults();
-						tweepFinder.updateCounter(search.getResultCount());	
+						tweepFinder.updateCounter(search.getResultCount(), false);	
 					});	
 				}	
 			});

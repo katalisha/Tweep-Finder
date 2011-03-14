@@ -1,12 +1,15 @@
 <html>
 	<head>
 		<script src="js/jquery-1.5.1.min.js"></script>	
+		<script src="js/chrome.js"></script>	
+		
 		<link rel="stylesheet" href="css/popup.css">
 		<script>
 			$(document).ready(function() {		
 
 				var bg = chrome.extension.getBackgroundPage();
 				var twitterTemplate = $('#twitterTemplate').detach();
+				var rowCount = 0;
 				
 				// set the function for handling a failure in retrieving the twitter details.	
 				bg.setFailureCallback(failure);
@@ -22,7 +25,8 @@
 				// set up an empty row (the twitter details may not be retrieved yet).
 				function setUpRow(tweep) {
 					var row = twitterTemplate.clone().attr('id', tweep.getName());
-					$('#twitterList').append(row);					
+					$('#twitterList').append(row);
+					tweepFinder.updateCounter(0, true);		
 				}	
 
 				// update the row.
@@ -30,9 +34,13 @@
 					var row = $('#' + tweep.getName());
 					$('.name', row).text(tweep.getName());
 					$('.fullname', row).text(tweep.getFullName());
-					$('a', row).attr('href', tweep.getURL());
+					$('a', row).attr('href', tweepFinder.openInNewTab(tweep.getURL()));
 					$('img', row).attr('src', tweep.getImageURL());
 					$('.description', row).text(tweep.getDescription());
+					row.addClass('found');
+					
+					tweepFinder.updateCounter(++rowCount, true);		
+
 					
 					$('#loading').hide();
 					$('#fail').hide();

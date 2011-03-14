@@ -49,7 +49,7 @@ tweepFinder.Info = new Interface('Info', ['getName', 'getFullName', 'getImageURL
 tweepFinder.Tweep = function(name, frequency) {
 	this._name;
 	this._frequency = frequency;
-	this._data;
+	this._data = null;
 	var me = this;
 	
 	this.setName(name);
@@ -75,19 +75,26 @@ tweepFinder.Tweep.method('getFrequency', function() {
 // retreives the data from twitter. The data and the given callback will be passed
 // on to the update function.
 tweepFinder.Tweep.method('retrieveData', function(callback) {
-	// create closure for so callback function has access to this.
-	var me = this;
-	tweepFinder.Twitter.lookUp(this._name,
-		function(response) {
-			me.update(response, callback);
-		}
-	);
+	if(this._data != null)
+	{
+		callback(this);	
+	}
+	else
+	{
+		// create closure for so callback function has access to this.
+		var me = this;
+		tweepFinder.Twitter.lookUp(this._name,
+			function(response) {
+				me.update(response);
+				callback(me);
+			}
+		);
+	}
 });
 
 // updates the tweep data and executes the given callback.
 tweepFinder.Tweep.method('update', function(data, callback) {
 	this._data = data;
-	callback(this);
 });
 
 tweepFinder.Tweep.method('getFullName', function() {
@@ -103,7 +110,7 @@ tweepFinder.Tweep.method('getDescription', function() {
 });
 
 tweepFinder.Tweep.method('getURL', function() {
-	return this._data.url || 'http://twitter.com';
+	return 'http://twitter.com/' + this._name;
 });
 
 /**
@@ -141,12 +148,13 @@ tweepFinder.Twitter = (function() {
 				success: function(response) {
 					callback(response);	
 				},
+				// the callback will not be called.
 				error: function(jqXHR, textStatus, errorThrown) {
-					if(typeof(_failure) == 'function')
-					{
-						_failure();	
+					if(jqXHR.status == '400') {
+						if(typeof(_failure) == 'function') {
+							_failure();	
+						}
 					}
-					console.log(textStatus);
 				}
 			});
 		}
