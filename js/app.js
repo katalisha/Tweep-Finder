@@ -106,7 +106,7 @@ tweepFinder.Tweep.method('getImageURL', function() {
 });
 
 tweepFinder.Tweep.method('getDescription', function() {
-	return this._data.description || 'Not found';	
+	return this._data.description || '';	
 });
 
 tweepFinder.Tweep.method('getURL', function() {

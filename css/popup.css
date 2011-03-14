@@ -57,6 +57,7 @@ li:hover {
 }
 
 .button {
+	background-color: #FFFFFF;
 	border: 1px solid #2276BB;	
 	display: block;
 	padding: 3px;
