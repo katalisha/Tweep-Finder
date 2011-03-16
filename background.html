@@ -5,7 +5,7 @@
 		<script src="js/chrome.js"></script>
 		<script src="js/app.js"></script>
 		<script>
-			var tweeps;
+			var tweeps = [];
 
 			$(document).ready(function() {
 			 	var search;		
@@ -22,13 +22,18 @@
 				  }
 				});	
 				
+				chrome.tabs.onCreated.addListener(function(tab) {
+					tweeps = [];
+					tweepFinder.updateCounter('0', false);
+				});
+				
 				chrome.tabs.onSelectionChanged.addListener(function(tabId, info) {
 					search = runSearch(tabId);
 				});
 							
 				// search the page for twitter accounts.
 				function runSearch(tabId) {
-					tweepFinder.updateCounter('', false);	
+					tweepFinder.updateCounter('0', false);	
 					
 					chrome.tabs.sendRequest(tabId, {}, function(results) {
 						search = new tweepFinder.Search();
@@ -37,13 +42,12 @@
 						tweepFinder.updateCounter(search.getResultCount(), false);	
 					});	
 				}	
-			});
+			});	
 			
-
 			// set up the failure callback on the twitter object.
 			function setFailureCallback(callback) {
-				tweepFinder.Twitter.setFailureCallback(callback);
-			}			
+				tweepFinder.Twitter.setAjaxFailureCallback(callback);
+			}				
 		</script>
 	</head>
 </html>

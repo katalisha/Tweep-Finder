@@ -1,6 +1,6 @@
 {
   "name": "Tweep Finder",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Finds twitter accounts in the page and displays their details.",
   "icons": {"128": "images/icon.png"},
   "browser_action": {

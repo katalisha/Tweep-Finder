@@ -136,7 +136,7 @@ tweepFinder.Twitter = (function() {
 		getRegex: function() {
 			return _regex;
 		},
-		setFailureCallback: function(callback) {
+		setAjaxFailureCallback: function(callback) {
 			_failure = callback;
 		},
 		

@@ -14,6 +14,13 @@
 				// set the function for handling a failure in retrieving the twitter details.	
 				bg.setFailureCallback(failure);
 				
+				if(bg.tweeps.length > 0) {
+					$('#status-loading').show();
+				}
+				else {
+					$('#status-not-found').show();
+				}
+				
 				// grad the twitter details for each tweep.
 				for(i = 0; i < bg.tweeps.length; i ++) {
 					var tweep = bg.tweeps[i];
@@ -46,35 +53,40 @@
 					tweepFinder.updateCounter(++rowCount, true);		
 
 					
-					$('#loading').hide();
-					$('#fail').hide();
-					$('#twitterList').show();					
+					$('section').hide();
+					$('#content').show();					
 				}		
 				
 				// handle a failure in twitter retrieval.
 				function failure() {
-					$('#loading').hide();
-					$('#twitterList').hide();
-					$('#fail').show();
+					$('.status').hide();
+					$('#status-fail').show();
 				}
 
 			});
 		</script>
 	</head>
 	<body>
-		<h1 id="loading">Loading...</h1>
-		<ul id="twitterList" style="display: none">
-			<li id="twitterTemplate">
-				<img class="image" src="">
-				<a class="button">View</a>
-				<a class="fullname"></a>
-				<div class="name"></div>
-				<div class="description"></div>
-			</li>
-		</ul>
-		<div id="fail" style="display: none">
+		<section id="content">		
+			<ul id="twitterList">
+				<li id="twitterTemplate">
+					<img class="image" src="">
+					<a class="button">View</a>
+					<a class="fullname"></a>
+					<div class="name"></div>
+					<div class="description"></div>
+				</li>
+			</ul>
+		</section>
+		<section id="status-not-found" class="status">
+			<h1>No Twitter Peeps Found</h1>
+		</section>	
+		<section id="status-loading" class="status">
+			<h1>Loading...</h1>
+		</section>
+		<section id="status-fail" class="status">
 			<h1>Could not contact Twitter</h1>
-			<p>You may have exceeded the query limit. Try again in a few moments.</p>
-		</div>
+			<p>You may have exceeded the hourly query limit. You should take a break.</p>
+		</section>		
 	</body>
 </html>
