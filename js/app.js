@@ -129,7 +129,7 @@ tweepFinder.Connector = new Interface('Connector', ['getRegex', 'lookUp']);
 
 // Twitter Singleton
 tweepFinder.Twitter = (function() {
-	 var _regex = /twitter\.com\/(\w{1,15})($|[^\w?])/i;
+	 var _regex = /twitter\.com\/[#!/]{0,3}(\w{1,15})($|[^\w?])/i;
 	 var _failure;
 	return {
 		// return the regex for this connector.
