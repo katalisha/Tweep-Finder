@@ -21,6 +21,10 @@
 					setUpRow(tweep);
 					tweep.retrieveData(renderTweep);
 				}
+				
+				$('ul').delegate('a', 'click', function() {
+					window.close();
+				});
 
 				// set up an empty row (the twitter details may not be retrieved yet).
 				function setUpRow(tweep) {
